@@ -26,7 +26,18 @@ jobs:
           coverage: none
 
       - name: Create .env file
-        run: cp .env.example .env
+        run: |
+          if [ -f .env ]; then
+            echo ".env already exists"
+          elif [ -f .env.example ]; then
+            cp .env.example .env
+          else
+            echo "APP_NAME=Laravel" > .env
+            echo "APP_ENV=testing" >> .env
+            echo "APP_KEY=" >> .env
+            echo "APP_DEBUG=true" >> .env
+            echo "APP_URL=http://localhost" >> .env
+          fi
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --optimize-autoloader
